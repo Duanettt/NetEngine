@@ -1,0 +1,16 @@
+﻿  Player.cpp
+C:\dev\Net Engine\NetEngine\NetEngine\src\Renderer\Camera.h(75,24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'src/Game/Player.cpp')
+  
+  Cube.cpp
+C:\dev\Net Engine\NetEngine\NetEngine\src\Renderer\Camera.h(75,24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'src/OpenGL/Cube.cpp')
+  
+  main.cpp
+C:\dev\Net Engine\NetEngine\NetEngine\src\Renderer\Camera.h(75,24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'src/main.cpp')
+  
+  Generating Code...
+  NetEngine.vcxproj -> C:\dev\Net Engine\NetEngine\NetEngine\x64\Debug\NetEngine.exe
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.
