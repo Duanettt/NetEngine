@@ -1,3 +1,4 @@
+C:\dev\NetEngine\NetEngine\src\Game\Systems\MovementSystem.cpp;C:\dev\NetEngine\NetEngine\x64\Debug\MovementSystem.obj
 C:\dev\NetEngine\NetEngine\src\Game\Player.cpp;C:\dev\NetEngine\NetEngine\x64\Debug\Player.obj
 C:\dev\NetEngine\NetEngine\src\Input\InputManager.cpp;C:\dev\NetEngine\NetEngine\x64\Debug\InputManager.obj
 C:\dev\NetEngine\NetEngine\src\main.cpp;C:\dev\NetEngine\NetEngine\x64\Debug\main.obj
@@ -8,3 +9,4 @@ C:\dev\NetEngine\NetEngine\src\Renderer\Model.cpp;C:\dev\NetEngine\NetEngine\x64
 C:\dev\NetEngine\NetEngine\src\Renderer\Renderer.cpp;C:\dev\NetEngine\NetEngine\x64\Debug\Renderer.obj
 C:\dev\NetEngine\NetEngine\src\Renderer\stb_image.cpp;C:\dev\NetEngine\NetEngine\x64\Debug\stb_image.obj
 C:\dev\NetEngine\NetEngine\src\Core\Window.cpp;C:\dev\NetEngine\NetEngine\x64\Debug\Window.obj
+C:\dev\NetEngine\NetEngine\src\Game\Systems\WorldSystem.cpp;C:\dev\NetEngine\NetEngine\x64\Debug\WorldSystem.obj

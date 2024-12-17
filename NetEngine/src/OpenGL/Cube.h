@@ -8,11 +8,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include "../Renderer/Mesh.h"
+#include "../Game/Systems/MovementSystem.h"
+#include "../Game/Systems/WorldSystem.h"
 
 
 class Cube
 {
-public:
+public: 
 
 	Cube() = default;
 	Cube(unsigned int texture);
@@ -41,7 +43,8 @@ public:
 	void updateModelMatrix();
 
 private:
-
+	WorldSystem ws;
+	MovementSystem ms;
 	Shader cubeShader;
 	unsigned int VAO, VBO, cubeTexture;
 	std::vector<Vertex> vertices;

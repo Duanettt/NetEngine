@@ -90,44 +90,36 @@ void Cube::Draw(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
     glBindVertexArray(VAO);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, cubeTexture);
-    cubeShader.setMat4("model", cubeModelMatrix);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
-void Cube::move(float deltaTime)
-{
-    currentSpeed = RUN_SPEED;
-    float distance = currentSpeed * deltaTime;
-    SetPosition(glm::vec3(0.0, 0.0, distance));
-}
+
 
 glm::vec3 Cube::GetPosition()
 {
-    return position;
+    return ws.GetPosition();
 }
 float Cube::GetPositionX()
 {
-    return position.x;
+    return ws.GetPosition().x;
 }
 float Cube::GetPositionY()
 {
-    return position.y;
+    return ws.GetPosition().y; 
 }
+
 float Cube::GetPositionZ()
 {
-    return position.z;
+    return ws.GetPosition().z; 
 }
 void Cube::SetPosition(glm::vec3 newPosition)
 {
-    position = newPosition;
-    cubeModelMatrix = glm::mat4(1.0f); // Reset to identity matrix
-    cubeModelMatrix = glm::translate(cubeModelMatrix, position);
-    cubeShader.use();
-    cubeShader.setMat4("model", cubeModelMatrix);
+    ws.SetPosition(newPosition);
 }
 void Cube::SetShader(Shader& shader)
 {
     cubeShader = shader;
+    ws.SetCurrentShader(shader);
 }
 
 
@@ -147,6 +139,6 @@ void Cube::HandleInput(GLFWwindow* window, float deltaTime)
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         movement.x += RUN_SPEED * deltaTime;
 
-    SetPosition(GetPosition() + movement);
+    ws.Translate(movement);
 }
 
