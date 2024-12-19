@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Terrain\NoiseTerrain.cpp" />
     <ClCompile Include="src\Game\Systems\MovementSystem.cpp" />
     <ClCompile Include="src\Game\Player.cpp" />
     <ClCompile Include="src\Input\InputManager.cpp" />
@@ -134,6 +135,7 @@
     <ClCompile Include="src\OpenGL\Cube.cpp" />
     <ClCompile Include="src\OpenGL\RenderTarget.cpp" />
     <ClCompile Include="src\Renderer\Camera.cpp" />
+    <ClCompile Include="src\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Renderer\Model.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Renderer\stb_image.cpp" />
@@ -141,6 +143,7 @@
     <ClCompile Include="src\Game\Systems\WorldSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Terrain\NoiseTerrain.h" />
     <ClInclude Include="src\Game\Systems\MovementSystem.h" />
     <ClInclude Include="src\Game\Player.h" />
     <ClInclude Include="src\Input\InputManager.h" />
@@ -163,6 +166,8 @@
     <None Include="res\shaders\playerShader.vert" />
     <None Include="res\shaders\screenShader.frag" />
     <None Include="res\shaders\screenShader.vert" />
+    <None Include="res\shaders\terrainShader.frag" />
+    <None Include="res\shaders\terrainShader.vert" />
     <None Include="res\shaders\vertexShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -51,6 +51,12 @@
     <ClCompile Include="src\Game\Systems\WorldSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\Terrain\NoiseTerrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Window.h">
@@ -92,6 +98,9 @@
     <ClInclude Include="src\Game\Systems\WorldSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\Terrain\NoiseTerrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\fragmentShader.frag" />
@@ -102,5 +111,7 @@
     <None Include="res\shaders\vertexShader.vert" />
     <None Include="res\shaders\cubeShader.vert" />
     <None Include="res\shaders\cubeShader.frag" />
+    <None Include="res\shaders\terrainShader.frag" />
+    <None Include="res\shaders\terrainShader.vert" />
   </ItemGroup>
 </Project>

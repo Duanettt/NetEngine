@@ -12,16 +12,19 @@
 #include "../Game/Systems/WorldSystem.h"
 
 
-class Cube
+class Cube : public Mesh
 {
 public: 
 
 	Cube() = default;
 	Cube(unsigned int texture);
 
+	~Cube();
+
 	void uploadVertexData();
 
 	void Draw(glm::mat4& viewMatrix, glm::mat4& projectionMatrix);
+
 
 
 	void move(float deltaTime);
@@ -45,6 +48,7 @@ public:
 private:
 	WorldSystem ws;
 	MovementSystem ms;
+	Mesh* mesh;
 	Shader cubeShader;
 	unsigned int VAO, VBO, cubeTexture;
 	std::vector<Vertex> vertices;

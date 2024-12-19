@@ -17,6 +17,7 @@
 #include "Input/InputManager.h"
 #include "Game/Player.h"
 #include "OpenGL/Cube.h"
+#include "Game/Terrain/NoiseTerrain.h"
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void processInput(GLFWwindow* window);
@@ -99,6 +100,7 @@ int main()
     Shader shader("res/shaders/vertexShader.vert", "res/shaders/fragmentShader.frag");
     Shader cubeShader("res/shaders/cubeShader.vert", "res/shaders/cubeShader.frag");
     Shader screenShader("res/shaders/screenShader.vert", "res/shaders/screenShader.frag");
+    Shader terrainShader("res/shaders/terrainShader.vert", "res/shaders/terrainShader.frag");
 
     //InputManager::Initialize(window);
 
@@ -229,6 +231,9 @@ int main()
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+
+
+    NoiseTerrain nt;
 
     // load textures
     // -------------
@@ -371,6 +376,10 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
 
         cube.Draw(view, projection);
+
+        // Terrain
+
+        nt.DrawTerrain(terrainShader, projection, view);
 
         // floor
 

@@ -1,7 +1,7 @@
 #include "Cube.h"
 #include "../Renderer/Camera.h"
 
-#define RUN_SPEED 5
+#define RUN_SPEED 3
 #define TURN_SPEED 160
 
 Cube::Cube(unsigned int texture) : cubeTexture(texture), cubeModelMatrix(glm::mat4(1.0f))
@@ -51,7 +51,14 @@ Cube::Cube(unsigned int texture) : cubeTexture(texture), cubeModelMatrix(glm::ma
         { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f, 1.0f) }
     };
 
-    uploadVertexData();
+    mesh = new Mesh(vertices);
+
+    mesh->setupMesh();
+}
+
+Cube::~Cube()
+{
+    delete mesh;
 }
 
 
@@ -78,6 +85,7 @@ void Cube::uploadVertexData()
     // vertex texture coords
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+
 }
 
 void Cube::Draw(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
@@ -91,7 +99,10 @@ void Cube::Draw(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, cubeTexture);
     glDrawArrays(GL_TRIANGLES, 0, 36);
+
+    mesh->Draw(cubeShader);
 }
+
 
 
 
@@ -131,13 +142,13 @@ void Cube::HandleInput(GLFWwindow* window, float deltaTime)
     glm::vec3 movement(0.0f);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        movement.z += RUN_SPEED * deltaTime;
+        movement.z -= RUN_SPEED * deltaTime; // Forward (negative Z)
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        movement.z -= RUN_SPEED * deltaTime;
+        movement.z += RUN_SPEED * deltaTime; // Backward (positive Z)
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        movement.x -= RUN_SPEED * deltaTime;
+        movement.x -= RUN_SPEED * deltaTime; // Left (negative X)
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        movement.x += RUN_SPEED * deltaTime;
+        movement.x += RUN_SPEED * deltaTime; // Right (positive X)
 
     ws.Translate(movement);
 }

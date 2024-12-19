@@ -1,12 +1,4 @@
-﻿  Player.cpp
-  MovementSystem.cpp
-  Cube.cpp
-  main.cpp
-C:\dev\NetEngine\NetEngine\src\main.cpp(556,25): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\dev\NetEngine\NetEngine\src\main.cpp(557,25): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\dev\NetEngine\NetEngine\src\main.cpp(564,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\dev\NetEngine\NetEngine\src\main.cpp(565,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  Generating Code...
+﻿  NoiseTerrain.cpp
   NetEngine.vcxproj -> C:\dev\NetEngine\x64\Debug\NetEngine.exe
   'pwsh.exe' is not recognized as an internal or external command,
   operable program or batch file.
