@@ -14,14 +14,19 @@
 
 
 #include <iostream>
+#include <memory>
 #include "Input/InputManager.h"
 #include "Game/Player.h"
 #include "OpenGL/Cube.h"
 #include "Game/Terrain/NoiseTerrain.h"
+#include "OpenGL/Cubemap.h"
+#include "Core/Ray.h"
+#include "Renderer/Debug/DebugRenderer.h"
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void processInput(GLFWwindow* window);
 unsigned int loadTexture(const char* path);
+unsigned int loadCubemap(vector<std::string> faces);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -29,7 +34,10 @@ const unsigned int SCR_HEIGHT = 600;
 
 // camera
 Camera camera(glm::vec3(0.0, 0.0, 3.0f));
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 Cursor* cursor;
+Ray ray;
+DefaultDebugRendererFactory factory;
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -42,47 +50,12 @@ float lastFrame = 0.0f;
 
 int main()
 {
-    // glfw: initialize and configure
-    // ------------------------------
-//    glfwInit();
-//    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-//    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-//    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-//
-//#ifdef __APPLE__
-//    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-//#endif
-//
-//    // glfw window creation
-//    // --------------------
-//    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
-//    if (window == NULL)
-//    {
-//        std::cout << "Failed to create GLFW window" << std::endl;
-//        glfwTerminate();
-//        return -1;
-//    }
-//    glfwMakeContextCurrent(window);
-//    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-//    glfwSetCursorPosCallback(window, mouse_callback);
-//    glfwSetScrollCallback(window, scroll_callback);
-//
-//    // tell GLFW to capture our mouse
-//    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
-
     Window window(800, 600, "LearnOpenGL");
-
     window.CreateWindow();
-
     Cursor cursor;
     window.SetWindowUserPointer(&cursor);
     window.SetCurrentContext();
-
     window.SetCallbacks(mouse_callback);
-
     window.SetInputMode();
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -97,16 +70,22 @@ int main()
 
     // build and compile shaders
     // -------------------------
+    // Resource Manager for loading all my shaders and textures and models etcetera.
     Shader shader("res/shaders/vertexShader.vert", "res/shaders/fragmentShader.frag");
     Shader cubeShader("res/shaders/cubeShader.vert", "res/shaders/cubeShader.frag");
     Shader screenShader("res/shaders/screenShader.vert", "res/shaders/screenShader.frag");
     Shader terrainShader("res/shaders/terrainShader.vert", "res/shaders/terrainShader.frag");
+    Shader skyboxShader("res/shaders/skyboxShader.vert", "res/shaders/skyboxShader.frag");
+    Shader lineShader("res/shaders/lineShader.vert", "res/shaders/lineShader.frag");
+    Shader lightingCubeShader("res/shaders/lightingCubeShader.vert", "res/shaders/lightingCubeShader.frag");
 
     //InputManager::Initialize(window);
 
-    Player player1(camera);
+    Player player1;
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
+
+    Cubemap cm;
 
     float cubeVertices[] = {
         // positions          // texture Coords
@@ -232,15 +211,26 @@ int main()
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
-
     NoiseTerrain nt;
+
+    cm.CreateCubemap();
+
+
+
 
     // load textures
     // -------------
-    unsigned int cubeTexture = loadTexture("res/textures/container.jpg");
+    unsigned int cubeTexture = loadTexture("res/textures/container2.png");
     unsigned int floorTexture = loadTexture("res/textures/metal.png");
 
+
+    cm.InitializeFaces();
+    cm.LoadCubemap();
+
     Cube cube(cubeTexture);
+    Cube lightCube;
+    lightCube.SetScale(0.5);
+    lightCube.SetPosition(lightPos);
 
 
     // shader configuration
@@ -250,6 +240,10 @@ int main()
 
     screenShader.use();
     screenShader.setInt("screenTexture", 0);
+
+    skyboxShader.use();
+    skyboxShader.setInt("skybox", 0);
+
 
     // framebuffer configuration
     // -------------------------
@@ -267,22 +261,16 @@ int main()
     currentRenderTarget.AttachRenderBuffer(rboObject);
     currentRenderTarget.Unbind();
 
-
     // 
     // 
     // render loop
     // -----------
 
     cube.SetShader(cubeShader);
-
-    cube.SetShader(cubeShader);
-
-
-
-
+    lightCube.SetShader(lightingCubeShader);
+    cubeShader.setInt("tm.diffuse", 0);
 
     while (!glfwWindowShouldClose(window.GetWindow()))
-
     {
 
         // per-frame time logic
@@ -294,20 +282,11 @@ int main()
         deltaTime = currentFrame - lastFrame;
 
         lastFrame = currentFrame;
-
-
-
         // input
 
         // -----
 
         processInput(window.GetWindow());
-
-
-
-
-
-
 
         // render
 
@@ -318,22 +297,13 @@ int main()
         //glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
         currentRenderTarget.Bind();
-
         glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
-
-
 
         // make sure we clear the framebuffer's content
 
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-
-
-
-
 
         //// cubes
 
@@ -351,98 +321,89 @@ int main()
 
         // 
 
+        // Light Cube
+
 
 
         cubeShader.use();
-
+        cubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+        cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
+        cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+        cubeShader.setVec3("tm.specular", 0.5f, 0.5f, 0.5f);
+        cubeShader.setFloat("material.shininess", 32.0f);
+        cubeShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        cubeShader.setVec3("lightPos", lightPos);
+        cubeShader.setVec3("viewPos", camera.Position);
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-
-
-
-
-
-
         camera.SetTarget(&cube);
-
         cube.HandleInput(window.GetWindow(), deltaTime);
-
         camera.Update(deltaTime);
 
 
 
 
-
+        glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = camera.GetViewMatrix();
-
         cube.Draw(view, projection);
+        ray.SetProjectionMatrix(projection);
+        glm::vec2 mouseScreenPos(window.GetCursorPosition().x, window.GetCursorPosition().y);
+        glm::vec3 worldRay = ray.ScreenToWorldRay(mouseScreenPos, SCR_WIDTH, SCR_HEIGHT, camera);
+        //std::cout << "The world ray x pos: " << worldRay.x << " The world ray y pos: " << worldRay.y << std::endl;
+        std::unique_ptr<DebugRenderer> lineRenderer = factory.CreateDebugLineRenderer(glm::vec3(0.0), worldRay);
+        lineRenderer->Draw(lineShader, view, projection, model);
 
-        // Terrain
 
-        nt.DrawTerrain(terrainShader, projection, view);
+        cube.UpdateRotation(worldRay, deltaTime);
+
+        // Light Cube
+        lightingCubeShader.use();
+        // Figure out why the model matrix is not being initialised..
+        //lightingCubeShader.setMat4("model", glm::mat4(1.0f));
+        lightCube.Update();
+        lightCube.Draw(view, projection);
+        //camera.SetTarget(&lightCube);
+
+
+        player1.Update(view, projection);
+        player1.Draw();
 
         // floor
-
         shader.use();
-
-        glm::mat4 model = glm::mat4(1.0f);
-
         shader.setMat4("view", view);
-
         shader.setMat4("projection", projection);
-
         glBindVertexArray(planeVAO);
-
         glBindTexture(GL_TEXTURE_2D, floorTexture);
-
         shader.setMat4("model", glm::mat4(1.0f));
-
         glDrawArrays(GL_TRIANGLES, 0, 6);
-
         glBindVertexArray(0);
 
-
-
-        //player1.Draw();
-
-
-
-
+        //// draw skybox as last
+        glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+        skyboxShader.use();
+        view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
+        skyboxShader.setMat4("view", view);
+        skyboxShader.setMat4("projection", projection);
+        cm.DrawCubemap(skyboxShader);
 
         // now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
-
         //glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
         currentRenderTarget.Unbind();
 
         glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
-
         // clear all relevant buffers
 
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
-
         glClear(GL_COLOR_BUFFER_BIT);
 
-
-
         screenShader.use();
-
         glBindVertexArray(quadVAO);
-
         colorTextureBuffer.Bind();
-
         //glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
-
         glDrawArrays(GL_TRIANGLES, 0, 6);
-
-
-
-
-
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 
         // -------------------------------------------------------------------------------
-
         glfwSwapBuffers(window.GetWindow());
 
         glfwPollEvents();
@@ -556,22 +517,11 @@ unsigned int loadTexture(char const* path)
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
-    Cursor* cursor = static_cast<Cursor*>(glfwGetWindowUserPointer(window));
-    float xpos = static_cast<float>(xposIn);
-    float ypos = static_cast<float>(yposIn);
+    cursor = static_cast<Cursor*>(glfwGetWindowUserPointer(window));
 
-    if (cursor->firstMouse)
+    if (cursor)
     {
-        cursor->lastX = xpos;
-        cursor->lastY = ypos;
-        cursor->firstMouse = false;
+       cursor->Update(xposIn, yposIn, camera);
     }
 
-    float xoffset = xpos - cursor->lastX;
-    float yoffset = cursor->lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-    cursor->lastX = xpos;
-    cursor->lastY = ypos;
-
-    camera.ProcessMouseMovement(xoffset, yoffset);
 }

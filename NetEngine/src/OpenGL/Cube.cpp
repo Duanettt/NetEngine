@@ -4,6 +4,58 @@
 #define RUN_SPEED 3
 #define TURN_SPEED 160
 
+Cube::Cube() : cubeModelMatrix(glm::mat4(1.0f))
+{
+    vertices = {
+        // positions          // normals                      // texture coords
+        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec2(0.0f, 0.0f) },
+
+        { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec2(0.0f, 0.0f) },
+
+        { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 0.0f) },
+
+        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec2(1.0f, 0.0f) },
+
+        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec2(0.0f, 1.0f) },
+
+        { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f, 1.0f) },
+        { glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(1.0f, 1.0f) },
+        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(1.0f, 0.0f) },
+        { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f, 0.0f) },
+        { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec2(0.0f, 1.0f) }
+    };
+
+    mesh = new Mesh(vertices);
+
+    mesh->setupMesh();
+}
+
 Cube::Cube(unsigned int texture) : cubeTexture(texture), cubeModelMatrix(glm::mat4(1.0f))
 {
     vertices = {
@@ -62,6 +114,12 @@ Cube::~Cube()
 }
 
 
+void Cube::Update()
+{
+    ws.UpdateModelMatrix();
+}
+
+
 void Cube::uploadVertexData()
 {
     glGenVertexArrays(1, &VAO);
@@ -100,7 +158,7 @@ void Cube::Draw(glm::mat4& viewMatrix, glm::mat4& projectionMatrix)
     glBindTexture(GL_TEXTURE_2D, cubeTexture);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 
-    mesh->Draw(cubeShader);
+    mesh->Draw();
 }
 
 
@@ -133,6 +191,16 @@ void Cube::SetShader(Shader& shader)
     ws.SetCurrentShader(shader);
 }
 
+void Cube::SetRotationY(float Pitch)
+{
+    ws.Rotate(glm::vec3(0.0, Pitch, 0.0));
+}
+
+void Cube::SetScale(float scale)
+{
+    ws.Scale(scale);
+}
+
 
 void Cube::HandleInput(GLFWwindow* window, float deltaTime)
 {
@@ -153,3 +221,30 @@ void Cube::HandleInput(GLFWwindow* window, float deltaTime)
     ws.Translate(movement);
 }
 
+void Cube::UpdateRotation(const glm::vec3& mouseIntersectionPoint, float deltaTime)
+{
+    glm::vec3 direction = glm::normalize(GetPosition() - mouseIntersectionPoint);
+
+    // Calculate the target rotation without deltaTime
+    float targetYaw = atan2(direction.x, direction.z);
+
+    // Get current rotation
+    float currentYaw = ws.GetRotation().y;
+
+    // Calculate the shortest rotation path
+    float angleDiff = targetYaw - currentYaw;
+    if (angleDiff > glm::pi<float>())
+        angleDiff -= 2 * glm::pi<float>();
+    else if (angleDiff < -glm::pi<float>())
+        angleDiff += 2 * glm::pi<float>();
+
+    // Smoothly interpolate to target rotation
+    float rotationSpeed = 10.0f; // Adjust this value to control rotation speed
+    float newYaw = currentYaw + (angleDiff * rotationSpeed * deltaTime);
+
+
+    glm::vec3 newRotation = glm::normalize(glm::vec3(0.0f, newYaw, 0.0f));
+
+    // Set the absolute rotation
+    ws.SetRotation(glm::vec3(0.0f, newYaw, 0.0f));
+}

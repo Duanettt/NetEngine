@@ -9,7 +9,7 @@ const float PITCH = 30.0f;
 const float SPEED = 2.5f;
 const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
-const float DISTANCE_FROM_PLAYER = 10.0F;
+const float DISTANCE_FROM_PLAYER = 5.0F;
 class Camera
 {
 public:
@@ -64,18 +64,19 @@ public:
     }
     glm::mat4 GetViewMatrix()
     {
-        std::cout << cube->GetPositionX() << std::endl;
-        std::cout << cube->GetPositionY() << std::endl;
-        std::cout << cube->GetPositionZ() << std::endl;
         return glm::lookAt(Position, cube->GetPosition(), Up);
     }
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
     {
         xoffset *= MouseSensitivity;
         yoffset *= MouseSensitivity;
+
         Yaw += xoffset;
         Pitch += yoffset;
+
+
         // Clamp Pitch to avoid flipping
+
         if (constrainPitch)
         {
             if (Pitch > 89.0f)
@@ -83,6 +84,7 @@ public:
             if (Pitch < -89.0f)
                 Pitch = -89.0f;
         }
+
         updateCameraVectors();
     }
 private:
@@ -99,12 +101,11 @@ private:
         if (!cube) return glm::vec3(1.0f);
         float xOffset = horizontalDistance * glm::sin(glm::radians(Yaw));
         float zOffset = horizontalDistance * glm::cos(glm::radians(Yaw));
-        std::cout << "The X Offset is: " << xOffset << std::endl;
-        std::cout << cube->GetPosition().x << std::endl;
-        std::cout << cube->GetPosition().z << std::endl;
+
         Position.x = cube->GetPosition().x - xOffset;
         Position.z = cube->GetPosition().z - zOffset;
         Position.y = cube->GetPosition().y + verticalDistance;
+
         return Position;
     }
 

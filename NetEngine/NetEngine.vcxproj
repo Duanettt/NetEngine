@@ -127,9 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Player.cpp" />
+    <ClCompile Include="src\Renderer\Debug\DebugRenderer.cpp" />
+    <ClCompile Include="src\Core\Ray.cpp" />
+    <ClCompile Include="src\OpenGL\Cubemap.cpp" />
+    <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Game\Terrain\NoiseTerrain.cpp" />
     <ClCompile Include="src\Game\Systems\MovementSystem.cpp" />
-    <ClCompile Include="src\Game\Player.cpp" />
     <ClCompile Include="src\Input\InputManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\OpenGL\Cube.cpp" />
@@ -141,11 +145,16 @@
     <ClCompile Include="src\Renderer\stb_image.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
     <ClCompile Include="src\Game\Systems\WorldSystem.cpp" />
+    <ClCompile Include="src\Game\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Player.h" />
+    <ClInclude Include="src\Renderer\Debug\DebugRenderer.h" />
+    <ClInclude Include="src\Core\Ray.h" />
+    <ClInclude Include="src\OpenGL\Cubemap.h" />
+    <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Game\Terrain\NoiseTerrain.h" />
     <ClInclude Include="src\Game\Systems\MovementSystem.h" />
-    <ClInclude Include="src\Game\Player.h" />
     <ClInclude Include="src\Input\InputManager.h" />
     <ClInclude Include="src\OpenGL\Cube.h" />
     <ClInclude Include="src\OpenGL\RenderTarget.h" />
@@ -157,18 +166,33 @@
     <ClInclude Include="src\Renderer\stb_image.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Game\Systems\WorldSystem.h" />
+    <ClInclude Include="src\Game\Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\cubeShader.frag" />
     <None Include="res\shaders\cubeShader.vert" />
     <None Include="res\shaders\fragmentShader.frag" />
+    <None Include="res\shaders\lightingCubeShader.frag" />
+    <None Include="res\shaders\lightingCubeShader.vert" />
+    <None Include="res\shaders\lineShader.frag" />
+    <None Include="res\shaders\lineShader.vert" />
     <None Include="res\shaders\playerShader.frag" />
     <None Include="res\shaders\playerShader.vert" />
     <None Include="res\shaders\screenShader.frag" />
     <None Include="res\shaders\screenShader.vert" />
+    <None Include="res\shaders\skyboxShader.frag" />
+    <None Include="res\shaders\skyboxShader.vert" />
     <None Include="res\shaders\terrainShader.frag" />
     <None Include="res\shaders\terrainShader.vert" />
     <None Include="res\shaders\vertexShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\skybox\back.jpg" />
+    <Image Include="res\skybox\bottom.jpg" />
+    <Image Include="res\skybox\front.jpg" />
+    <Image Include="res\skybox\left.jpg" />
+    <Image Include="res\skybox\right.jpg" />
+    <Image Include="res\skybox\top.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -53,6 +53,13 @@ void Window::SetInputMode()
 
 }
 
+glm::vec2 Window::GetCursorPosition()
+{
+    double xpos, ypos;
+    glfwGetCursorPos(this->currentWindow, &xpos, &ypos);
+    return glm::vec2(xpos, ypos);
+}
+
 
 GLFWwindow* Window::GetWindow()
 {

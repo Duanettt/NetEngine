@@ -1,4 +1,28 @@
-﻿  NoiseTerrain.cpp
+﻿  Ray.cpp
+C:\dev\NetEngine\NetEngine\src\Core\Ray.cpp(17,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\dev\NetEngine\NetEngine\src\Core\Ray.cpp(18,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Window.cpp
+C:\dev\NetEngine\NetEngine\src\Core\Window.h(32,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'src/Core/Window.cpp')
+  
+C:\dev\NetEngine\NetEngine\src\Core\Window.h(33,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'src/Core/Window.cpp')
+  
+  NoiseTerrain.cpp
+  Cube.cpp
+  Cubemap.cpp
+  DebugRenderer.cpp
+  Mesh.cpp
+  Model.cpp
+  main.cpp
+C:\dev\NetEngine\NetEngine\src\Core\Window.h(32,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'src/main.cpp')
+  
+C:\dev\NetEngine\NetEngine\src\Core\Window.h(33,18): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'src/main.cpp')
+  
+  Generating Code...
+C:\dev\NetEngine\NetEngine\src\Core\Window.cpp(28,1): warning C4715: 'Window::CreateWindow': not all control paths return a value
   NetEngine.vcxproj -> C:\dev\NetEngine\x64\Debug\NetEngine.exe
   'pwsh.exe' is not recognized as an internal or external command,
   operable program or batch file.

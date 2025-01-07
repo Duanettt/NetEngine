@@ -75,17 +75,38 @@ public:
         setupMesh();
     }
 
+    void Draw() {
+        // Add debug checks
+        if (vertices.empty()) {
+            std::cerr << "Error: Attempting to draw mesh with no vertices!" << std::endl;
+            return;
+        }
 
-    void Draw(Shader& shader) {
+        // Debug info
+        std::cout << "Drawing mesh with:" << std::endl;
+        std::cout << "Vertices: " << vertices.size() << std::endl;
+        std::cout << "Indices: " << indices.size() << std::endl;
+        std::cout << "VAO: " << VAO << std::endl;
+
+        // Verify VAO is valid
+        GLint currentVAO;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &currentVAO);
+        if (currentVAO != VAO) {
+            std::cerr << "Warning: Current VAO (" << currentVAO << ") doesn't match mesh VAO (" << VAO << ")" << std::endl;
+        }
+
+        // Proceed with drawing
         glBindVertexArray(VAO);
-        if (!indices.empty())
+        if (!indices.empty()) {
             glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
-        else
+        }
+        else {
             glDrawArrays(GL_TRIANGLES, 0, static_cast<unsigned int>(vertices.size()));
+        }
         glBindVertexArray(0);
     }
 
-    void Draw(Shader& shader, unsigned int drawMode) {
+     void Draw(unsigned int drawMode) {
         glBindVertexArray(VAO);
         if (!indices.empty())
             glDrawElements(drawMode, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
@@ -139,6 +160,20 @@ public:
         glBindVertexArray(0);
     }
 
+    static std::vector<glm::vec3> ConvertFloatVerticesToVec3(float floatVertices[]) {
+        std::vector<glm::vec3> vertices;
+        for (size_t i = 0; i < sizeof(floatVertices) / sizeof(float); i += 3) {
+            vertices.emplace_back(floatVertices[i], floatVertices[i + 1], floatVertices[i + 2]);
+        }
+
+        return vertices;
+    }
+
+    ~Mesh()
+    {
+        glDeleteVertexArrays(1, &VAO);
+        glDeleteBuffers(1, &VBO);
+    }
 
 private:
     // render data 

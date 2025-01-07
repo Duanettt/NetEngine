@@ -16,10 +16,12 @@ class Cube : public Mesh
 {
 public: 
 
-	Cube() = default;
+	Cube();
 	Cube(unsigned int texture);
 
 	~Cube();
+
+	void Update();
 
 	void uploadVertexData();
 
@@ -41,9 +43,17 @@ public:
 
 	void SetShader(Shader& cubeShader);
 
+	void SetRotationY(float Pitch);
+
+
+	void SetRotationX();
+
+	void SetScale(float scale);
+
 	void HandleInput(GLFWwindow* window, float deltaTime);
 
 	void updateModelMatrix();
+	void UpdateRotation(const glm::vec3& mouseIntersectionPoint, float deltaTime);
 
 private:
 	WorldSystem ws;

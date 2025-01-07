@@ -36,7 +36,8 @@ public:
     void Draw(Shader& shader)
     {
         for (unsigned int i = 0; i < meshes.size(); i++)
-            meshes[i].Draw(shader);
+            //FIXME: Remember to add a shader draw method
+            meshes[i].Draw();
     }
 
 private:
